@@ -2,7 +2,7 @@ class PlayersController < ApplicationController
   before_filter :load_player, only: [:update, :destroy]
 
   def index
-    @players = Player.all
+    @players = Player.order(score: :desc)
     render json: @players
   end
 
