@@ -16,18 +16,22 @@ var PlayerRow = React.createClass({
               <button type="submit" className="control-button save-button"></button>
             </form>
           </td>
-          <td>{this.state.score}</td>
-          <span onClick={this.upPoint} className="control-button up-button"></span>
-          <span onClick={this.downPoint} className="control-button down-button"></span>
-          <span onClick={this.startEditing} className="control-button edit-button"></span>
-          <span onClick={this.handleDeleteClick} className="control-button delete-button"></span>
+          <td className="score-cell">{this.state.score}</td>
+          <td>
+            <span onClick={this.upPoint} className="control-button up-button"></span>
+            <span onClick={this.downPoint} className="control-button down-button"></span>
+          </td>
+          <td>
+            <span onClick={this.startEditing} className="control-button edit-button"></span>
+            <span onClick={this.handleDeleteClick} className="control-button delete-button"></span>
+          </td>
         </tr>
       )
       }
       return (
         <tr>
-          <td>{this.state.name}</td>
-          <td>{this.state.score}</td>
+          <td className="name-cell" onClick={this.startEditing}>{this.state.name}</td>
+          <td className="score-cell">{this.state.score}</td>
           <td>
             <span onClick={this.upPoint} className="control-button up-button"></span>
             <span onClick={this.downPoint} className="control-button down-button"></span>
