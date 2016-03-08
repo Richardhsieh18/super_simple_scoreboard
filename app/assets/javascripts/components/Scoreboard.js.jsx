@@ -66,10 +66,6 @@ var Scoreboard = React.createClass({
 
         {adminButton}
 
-        {this.state.adminMode ? <NewPlayerForm addPlayerToApp={this.addPlayerToApp}
-                                                handleSubmit={this.handleSubmit}
-                                                scoreboardId={this.props.id}/> : ""}
-
         <table className="u-full-width">
           <thead>
             <tr>
@@ -81,6 +77,10 @@ var Scoreboard = React.createClass({
             {playerRows}
           </tbody>
         </table>
+
+        {this.state.adminMode ? <NewPlayerForm addPlayerToApp={this.addPlayerToApp}
+                                                handleSubmit={this.handleSubmit}
+                                                scoreboardId={this.props.id}/> : ""}
       </section>
     )
   },

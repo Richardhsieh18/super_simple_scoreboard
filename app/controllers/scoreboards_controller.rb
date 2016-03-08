@@ -1,7 +1,7 @@
 class ScoreboardsController < ApplicationController
 
   def create
-    @scoreboard = Scoreboard.create!(name: "Click to edit scoreboard name", description: "Click to edit scoreboard description")
+    @scoreboard = Scoreboard.create!(name: "New Scoreboard", description: "Scoreboard Description")
     render json: @scoreboard
   end
 
