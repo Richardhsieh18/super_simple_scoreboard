@@ -1,14 +1,31 @@
 var Scoreboard = React.createClass({
   getInitialState: function() {
-    return({players: []})
+    return({
+              players: [],
+              name: "",
+              description: "",
+              editingName: false})
   },
   componentDidMount: function() {
     this.getPlayers();
     setInterval(this.getPlayers, 10000);
+    this.setState({name: this.props.name});
+    this.setState({description: this.props.description});
   },
   render: function() {
+    var scoreboardTitle;
+    if (this.state.editingName) {
+      scoreboardTitle = <form onSubmit={this.saveName}>
+                          <input type="text" value={this.state.name} onChange={this.setName} ref="name"/>
+                          <button type="submit" className="control-button save-button"></button>
+                        </form>
+    } else {
+      scoreboardTitle = <h1 onClick={this.editName}>{this.state.name}</h1>
+    }
     return (
       <section>
+        {scoreboardTitle}
+        <p onClick={this.editDescription}>{this.state.description}</p>
         <NewPlayerForm addPlayerToApp={this.addPlayerToApp} handleSubmit={this.handleSubmit} scoreboardId={this.props.id}/>
         <PlayerTable players={this.state.players} deletePlayer={this.deletePlayer}/>
       </section>
@@ -31,6 +48,25 @@ var Scoreboard = React.createClass({
       success: function(result) {
         console.log(result);
         _this.getPlayers();
+      }
+    })
+  },
+  editName: function() {
+    this.setState({editingName: true});
+  },
+  setName: function() {
+    this.setState({name: this.refs.name.value});
+  },
+  saveName: function(e) {
+    _this = this;
+    e.preventDefault();
+    $.ajax({
+      url: '/scoreboards/' + this.props.id,
+      method: 'PUT',
+      data: {scoreboard: {name: this.state.name}},
+      success: function() {
+        console.log('Scoreboard name updated.');
+        _this.setState({editingName: false});
       }
     })
   }

@@ -1,9 +1,9 @@
 var App = React.createClass({
   getInitialState: function() {
-    return {scoreboardId: 0}
+    return {scoreboard: 0}
   },
   render: function() {
-    if (!this.state.scoreboardId) {
+    if (!this.state.scoreboard) {
       return (
         <div className="container">
           <h1>Super Simple Scoreboard</h1>
@@ -16,14 +16,15 @@ var App = React.createClass({
         </div>
       )
     } else {
-      return <Scoreboard id={this.state.scoreboardId}/>
+      return <Scoreboard name={this.state.scoreboard.name}
+                        description={this.state.scoreboard.description}
+                        id={this.state.scoreboard.id} />
     }
   },
   createScoreboard: function() {
     _this = this;
     $.post('/scoreboards', function(data) {
-      console.log(data.id);
-      _this.setState({scoreboardId: data.id});
+      _this.setState({scoreboard: data});
     });
   }
 });
