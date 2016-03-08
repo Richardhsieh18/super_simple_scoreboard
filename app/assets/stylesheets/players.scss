@@ -35,6 +35,11 @@
   height: 20px;
 }
 
+.refresh-button {
+  background-image: image-url("refresh.svg");
+  margin-top: 20px;
+}
+
 form {
   .edit-name-box {
     margin: 0;

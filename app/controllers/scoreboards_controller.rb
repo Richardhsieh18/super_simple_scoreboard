@@ -10,6 +10,11 @@ class ScoreboardsController < ApplicationController
     render json: @scoreboard
   end
 
+  def show
+    @scoreboard = Scoreboard.find(params[:id])
+    render json: @scoreboard
+  end
+
   private
   def scoreboard_params
     params.require(:scoreboard).permit(:name, :description)

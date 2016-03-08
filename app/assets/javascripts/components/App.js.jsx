@@ -1,6 +1,10 @@
 var App = React.createClass({
   getInitialState: function() {
-    return {scoreboard: 0}
+    if (window.location.hash) {
+      return {scoreboard: this.getScoreboard()}
+    } else {
+      return {scoreboard: 0}
+    }
   },
   render: function() {
     if (!this.state.scoreboard) {
@@ -24,6 +28,15 @@ var App = React.createClass({
   createScoreboard: function() {
     _this = this;
     $.post('/scoreboards', function(data) {
+      _this.setState({scoreboard: data});
+      window.location.hash = "#" + data.id;
+    });
+  },
+  getScoreboard: function() {
+    _this = this;
+    var boardId = window.location.hash.split('#')[1]
+    console.log(boardId);
+    $.get('/scoreboards/' + boardId, function(data) {
       _this.setState({scoreboard: data});
     });
   }

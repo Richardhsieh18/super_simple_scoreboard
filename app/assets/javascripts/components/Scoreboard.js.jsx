@@ -15,6 +15,9 @@ var Scoreboard = React.createClass({
     this.setState({description: this.props.description});
   },
   render: function() {
+    var sortedPlayers = _.sortBy(this.state.players, function(player) {
+      return Math.sin(player.score);
+    });
     var scoreboardTitle;
     if (this.state.editingName) {
       scoreboardTitle = <form onSubmit={this.saveName}>
@@ -43,16 +46,34 @@ var Scoreboard = React.createClass({
           scoreboardDescription = <p className="editable" onClick={this.editDescription}>{this.state.description}</p>
         }
 
+        _this = this;
+        var playerRows = this.state.players.map(function(player) {
+          return <PlayerRow deletePlayer={_this.deletePlayer} player={player} key={player.id} />
+        });
+
     return (
       <section>
-        {scoreboardTitle}
-        {scoreboardDescription}
+        <div className="columns ten">
+          {scoreboardTitle}
+          {scoreboardDescription}
+        </div>
+        <span className="control-button refresh-button" onClick={this.getPlayers}></span>
 
         <NewPlayerForm addPlayerToApp={this.addPlayerToApp}
                         handleSubmit={this.handleSubmit}
                         scoreboardId={this.props.id}/>
 
-        <PlayerTable players={this.state.players} deletePlayer={this.deletePlayer}/>
+        <table className="u-full-width">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Score</th>
+              </tr>
+          </thead>
+          <tbody>
+            {playerRows}
+          </tbody>
+        </table>
       </section>
     )
   },
