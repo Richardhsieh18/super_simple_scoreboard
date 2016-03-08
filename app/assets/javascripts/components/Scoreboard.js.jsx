@@ -4,7 +4,9 @@ var Scoreboard = React.createClass({
               players: [],
               name: "",
               description: "",
-              editingName: false})
+              editingName: false,
+              editingDescription: false
+          });
   },
   componentDidMount: function() {
     this.getPlayers();
@@ -16,17 +18,40 @@ var Scoreboard = React.createClass({
     var scoreboardTitle;
     if (this.state.editingName) {
       scoreboardTitle = <form onSubmit={this.saveName}>
-                          <input type="text" value={this.state.name} onChange={this.setName} ref="name"/>
+                          <input className="edit-title"
+                                  type="text"
+                                  value={this.state.name}
+                                  onChange={this.setName}
+                                  ref="name"/>
                           <button type="submit" className="control-button save-button"></button>
                         </form>
     } else {
-      scoreboardTitle = <h1 onClick={this.editName}>{this.state.name}</h1>
+      scoreboardTitle = <h1 className="editable" onClick={this.editName}>{this.state.name}</h1>
     }
+
+    var scoreboardDescription;
+        if (this.state.editingDescription) {
+          scoreboardDescription = <form onSubmit={this.saveDescription}>
+                                    <input className="edit-description"
+                                            type="text"
+                                            value={this.state.description}
+                                            onChange={this.setDescription}
+                                            ref="description"/>
+                                    <button type="submit" className="control-button save-button"></button>
+                                  </form>
+        } else {
+          scoreboardDescription = <p className="editable" onClick={this.editDescription}>{this.state.description}</p>
+        }
+
     return (
       <section>
         {scoreboardTitle}
-        <p onClick={this.editDescription}>{this.state.description}</p>
-        <NewPlayerForm addPlayerToApp={this.addPlayerToApp} handleSubmit={this.handleSubmit} scoreboardId={this.props.id}/>
+        {scoreboardDescription}
+
+        <NewPlayerForm addPlayerToApp={this.addPlayerToApp}
+                        handleSubmit={this.handleSubmit}
+                        scoreboardId={this.props.id}/>
+
         <PlayerTable players={this.state.players} deletePlayer={this.deletePlayer}/>
       </section>
     )
@@ -67,6 +92,25 @@ var Scoreboard = React.createClass({
       success: function() {
         console.log('Scoreboard name updated.');
         _this.setState({editingName: false});
+      }
+    })
+  },
+  editDescription: function() {
+    this.setState({editingDescription: true});
+  },
+  setDescription: function() {
+    this.setState({description: this.refs.description.value});
+  },
+  saveDescription: function(e) {
+    _this = this;
+    e.preventDefault();
+    $.ajax({
+      url: '/scoreboards/' + this.props.id,
+      method: 'PUT',
+      data: {scoreboard: {description: this.state.description}},
+      success: function() {
+        console.log('Scoreboard description updated.');
+        _this.setState({editingDescription: false});
       }
     })
   }

@@ -56,3 +56,11 @@ form {
   cursor: pointer;
   min-width: 300px;
 }
+
+.editable {
+  cursor: pointer;
+}
+
+.edit-title, .edit-description {
+  width: 80%;
+}
