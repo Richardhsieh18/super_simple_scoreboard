@@ -5,7 +5,8 @@ var Scoreboard = React.createClass({
               name: "",
               description: "",
               editingName: false,
-              editingDescription: false
+              editingDescription: false,
+              adminMode: false
           });
   },
   componentDidMount: function() {
@@ -15,9 +16,6 @@ var Scoreboard = React.createClass({
     this.setState({description: this.props.description});
   },
   render: function() {
-    var sortedPlayers = _.sortBy(this.state.players, function(player) {
-      return Math.sin(player.score);
-    });
     var scoreboardTitle;
     if (this.state.editingName) {
       scoreboardTitle = <form onSubmit={this.saveName}>
@@ -29,7 +27,7 @@ var Scoreboard = React.createClass({
                           <button type="submit" className="control-button save-button"></button>
                         </form>
     } else {
-      scoreboardTitle = <h1 className="editable" onClick={this.editName}>{this.state.name}</h1>
+      scoreboardTitle = <h1 className="editable" onClick={this.state.adminMode ? this.editName : null}>{this.state.name}</h1>
     }
 
     var scoreboardDescription;
@@ -43,12 +41,19 @@ var Scoreboard = React.createClass({
                                     <button type="submit" className="control-button save-button"></button>
                                   </form>
         } else {
-          scoreboardDescription = <p className="editable" onClick={this.editDescription}>{this.state.description}</p>
+          scoreboardDescription = <p className="editable" onClick={this.state.adminMode ? this.editDescription : null}>{this.state.description}</p>
+        }
+
+        var adminButton;
+        if (this.state.adminMode) {
+          adminButton = <span className="control-button admin-on-button" onClick={this.endAdminMode}></span>;
+        } else {
+          adminButton = <span className="control-button admin-on-button" onClick={this.startAdminMode}></span>;
         }
 
         _this = this;
         var playerRows = this.state.players.map(function(player) {
-          return <PlayerRow deletePlayer={_this.deletePlayer} player={player} key={player.id} />
+          return <PlayerRow deletePlayer={_this.deletePlayer} player={player} key={player.id} checkIfAdminMode={_this.checkIfAdminMode}/>
         });
 
     return (
@@ -59,9 +64,11 @@ var Scoreboard = React.createClass({
         </div>
         <span className="control-button refresh-button" onClick={this.getPlayers}></span>
 
-        <NewPlayerForm addPlayerToApp={this.addPlayerToApp}
-                        handleSubmit={this.handleSubmit}
-                        scoreboardId={this.props.id}/>
+        {adminButton}
+
+        {this.state.adminMode ? <NewPlayerForm addPlayerToApp={this.addPlayerToApp}
+                                                handleSubmit={this.handleSubmit}
+                                                scoreboardId={this.props.id}/> : ""}
 
         <table className="u-full-width">
           <thead>
@@ -134,5 +141,15 @@ var Scoreboard = React.createClass({
         _this.setState({editingDescription: false});
       }
     })
+  },
+  startAdminMode: function() {
+    this.setState({adminMode: true});
+  },
+  endAdminMode: function() {
+    this.setState({adminMode: false});
+  },
+  checkIfAdminMode: function() {
+    console.log("checking if we're in admin mode...");
+    return(this.state.adminMode);
   }
 });

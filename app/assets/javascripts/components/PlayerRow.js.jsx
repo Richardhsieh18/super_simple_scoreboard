@@ -7,6 +7,19 @@ var PlayerRow = React.createClass({
     };
   },
   render: function() {
+    console.log("rendering row...");
+    var adminScoreSection;
+    var adminEditSection;
+    if (this.props.checkIfAdminMode()) {
+      adminScoreSection = <td>
+                        <span onClick={this.upPoint} className="control-button up-button"></span>
+                        <span onClick={this.downPoint} className="control-button down-button"></span>
+                      </td>
+      adminEditSection = <td>
+                          <span onClick={this.startEditing} className="control-button edit-button"></span>
+                          <span onClick={this.handleDeleteClick} className="control-button delete-button"></span>
+                        </td>
+    }
     if (this.state.editing) {
       return(
         <tr>
@@ -30,16 +43,10 @@ var PlayerRow = React.createClass({
       }
       return (
         <tr>
-          <td className="name-cell" onClick={this.startEditing}>{this.state.name}</td>
+          <td className="name-cell" onClick={this.props.checkIfAdminMode() ? this.startEditing : null}>{this.state.name}</td>
           <td className="score-cell">{this.state.score}</td>
-          <td>
-            <span onClick={this.upPoint} className="control-button up-button"></span>
-            <span onClick={this.downPoint} className="control-button down-button"></span>
-          </td>
-          <td>
-            <span onClick={this.startEditing} className="control-button edit-button"></span>
-            <span onClick={this.handleDeleteClick} className="control-button delete-button"></span>
-          </td>
+          {adminScoreSection}
+          {adminEditSection}
         </tr>
     )
   },

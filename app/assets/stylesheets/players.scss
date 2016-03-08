@@ -40,6 +40,12 @@
   margin-top: 20px;
 }
 
+.admin-on-button {
+  background-image: image-url("edit.svg");
+  width: 25px;
+  height: 25px;
+}
+
 form {
   .edit-name-box {
     margin: 0;
