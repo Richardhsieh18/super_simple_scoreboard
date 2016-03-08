@@ -10,7 +10,7 @@ var Scoreboard = React.createClass({
   },
   componentDidMount: function() {
     this.getPlayers();
-    setInterval(this.getPlayers, 10000);
+    // setInterval(this.getPlayers, 30000);
     this.setState({name: this.props.name});
     this.setState({description: this.props.description});
   },
