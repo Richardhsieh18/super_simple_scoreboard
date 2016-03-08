@@ -9,14 +9,14 @@ var Scoreboard = React.createClass({
   render: function() {
     return (
       <section>
-        <NewPlayerForm addPlayerToApp={this.addPlayerToApp} handleSubmit={this.handleSubmit} />
+        <NewPlayerForm addPlayerToApp={this.addPlayerToApp} handleSubmit={this.handleSubmit} scoreboardId={this.props.id}/>
         <PlayerTable players={this.state.players} deletePlayer={this.deletePlayer}/>
       </section>
     )
   },
   getPlayers: function() {
     _this = this;
-    $.get('/players', function(data) {
+    $.get('/players', {scoreboard_id: this.props.id}, function(data) {
       _this.setState({players: data})
     });
   },

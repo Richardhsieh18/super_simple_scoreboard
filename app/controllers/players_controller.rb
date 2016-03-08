@@ -2,7 +2,7 @@ class PlayersController < ApplicationController
   before_filter :load_player, only: [:update, :destroy]
 
   def index
-    @players = Player.order(score: :desc)
+    @players = Player.where(scoreboard_id: params[:scoreboard_id]).order(score: :desc)
     render json: @players
   end
 
@@ -23,7 +23,7 @@ class PlayersController < ApplicationController
 
   private
   def player_params
-    params.require(:player).permit(:name, :score)
+    params.require(:player).permit(:name, :score, :scoreboard_id)
   end
 
   def load_player
